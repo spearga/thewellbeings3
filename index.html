@@ -54,8 +54,7 @@
     <script>
       (function() {
         var stripe = Stripe('pk_live_64Ew7MOXhbplYxNUAiwlFSRY');
-      
-        var checkoutButton = document.getElementById('checkout-button-sku_H2ODFrLndYVivp');
+        var checkoutButton = document.getElementsByClassName('button w-button');
         checkoutButton.addEventListener('click', function () {
           // When the customer clicks on the button, redirect
           // them to Checkout.
@@ -87,6 +86,50 @@
       <a href="https://twitter.com/IFWales"><img src="images/twitter-white.svg" width="65" alt=""></a>
       <a href="https://www.facebook.com/inspirationalfutures"><img src="images/facebook-white.svg" width="65" alt=""></a>
       <a href="https://www.instagram.com/inspirationalfutureswales/"><img src="images/instagram-white.svg" width="65" alt=""></div></div></a>
+<!-- Load Stripe.js on your website. -->
+<script src="https://js.stripe.com/v3"></script>
+
+<!-- Create a button that your customers click to complete their purchase. Customize the styling to suit your branding. -->
+<button
+  style="background-color:#6772E5;color:#FFF;padding:8px 12px;border:0;border-radius:4px;font-size:1em"
+  id="checkout-button-sku_H2ODFrLndYVivp"
+  role="link"
+>
+  Checkout
+</button>
+
+<div id="error-message"></div>
+
+<script>
+(function() {
+  var stripe = Stripe('pk_live_64Ew7MOXhbplYxNUAiwlFSRY');
+
+  var checkoutButton = document.getElementById('checkout-button-sku_H2ODFrLndYVivp');
+  checkoutButton.addEventListener('click', function () {
+    // When the customer clicks on the button, redirect
+    // them to Checkout.
+    stripe.redirectToCheckout({
+      items: [{sku: 'sku_H2ODFrLndYVivp', quantity: 1}],
+
+      // Do not rely on the redirect to the successUrl for fulfilling
+      // purchases, customers may not always reach the success_url after
+      // a successful payment.
+      // Instead use one of the strategies described in
+      // https://stripe.com/docs/payments/checkout/fulfillment
+      successUrl: 'https://www.bbc.co.uk',
+      cancelUrl: 'https://www.bbc.co.uk',
+    })
+    .then(function (result) {
+      if (result.error) {
+        // If `redirectToCheckout` fails due to a browser or network
+        // error, display the localized error message to your customer.
+        var displayError = document.getElementById('error-message');
+        displayError.textContent = result.error.message;
+      }
+    });
+  });
+})();
+</script>
   </div>
   <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js?site=5e88eee3bcf6e10895c347e1" type="text/javascript" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script src="js/webflow.js" type="text/javascript"></script>
